@@ -11,6 +11,9 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+  $router->get('/', function () use ($router) {
+    return "You are in a right place ";
+  });
+  $router->group(['prefix' => 'api'], function () use ($router) {
+    $router->get('book',  ['uses' => 'BookController@index']);
+  });
