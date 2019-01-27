@@ -2,18 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Author;
 use App\Book;
+use App\Category;
 
 class BookController extends Controller
 {
   /**
-   * Retrieve all books.
+   * Retrieve books with filters if given.
    *
-   * @return Response
+   * @param string author
+   * @param string category
+   * @return Response response
    */
-  public function index()
+  public function show($author = null, $category = null)
   {
-    $books = Book::all();
-    return response()->json($books);
+    if ($author != null) {
+      $author = urldecode($author);
+      $authorId = Author::all("id")->where("name", $author);
+    }
+    if ($category != null) {
+      $category = urldecode($category);
+      $categoryId = Category::all("id")->where("name", $category);
+    }
+    // TODO create query according to variables and return as json
+    return response()->json(null);
   }
 }

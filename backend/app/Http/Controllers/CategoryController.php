@@ -7,7 +7,7 @@ use App\Category;
 class CategoryController extends Controller
 {
   /**
-   * Retrieve all books.
+   * Retrieve all categories.
    *
    * @return Response
    */
