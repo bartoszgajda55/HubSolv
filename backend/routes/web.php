@@ -11,9 +11,17 @@
 |
 */
 
-  $router->get('/', function () use ($router) {
-    return "You are in a right place ";
-  });
-  $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->get('book',  ['uses' => 'BookController@index']);
-  });
+$router->get('/', function () use ($router) {
+  return "You are in a right place ";
+});
+
+$router->group(['prefix' => 'api/book'], function () use ($router) {
+  $router->get('/',  ['uses' => 'BookController@index']);
+  $router->get('/[{author}/{category}]',  ['uses' => 'BookController@show']);
+
+  $router->post('/',  ['uses' => 'CategoryController@store']);
+});
+
+$router->group(['prefix' => 'api/category'], function () use ($router) {
+  $router->get('category',  ['uses' => 'CategoryController@index']);
+});
