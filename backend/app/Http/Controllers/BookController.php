@@ -5,27 +5,44 @@ namespace App\Http\Controllers;
 use App\Author;
 use App\Book;
 use App\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
   /**
    * Retrieve books with filters if given.
    *
-   * @param string author
-   * @param string category
+   * @param Request $request
    * @return Response response
    */
-  public function show($author = null, $category = null)
+  public function show(Request $request)
   {
-    if ($author != null) {
-      $author = urldecode($author);
-      $authorId = Author::all("id")->where("name", $author);
+    if ($request->has("author") && $request->has("category")) {
+      $books = DB::table("books")
+          ->select("books.isbn")
+          ->join("categories_books", "categories_books.book_id", "=", "books.id")
+          ->join("categories", "categories_books.category_id", "=", "categories.id")
+          ->join("authors", "books.author", "=", "authors.id")
+          ->where("categories.name", "=", $request->input("category"))
+          ->where("authors.name", "=", $request->input("author"))
+          ->get();
+    } else if ($request->has("author")) {
+      $books = DB::table("books")
+          ->select("books.isbn")
+          ->join("authors", "books.author", "=", "authors.id")
+          ->where("authors.name", "=", $request->input("author"))
+          ->get();
+    } else if ($request->has("category")) {
+      $books = DB::table("books")
+          ->select("books.isbn")
+          ->join("categories_books", "categories_books.book_id", "=", "books.id")
+          ->join("categories", "categories_books.category_id", "=", "categories.id")
+          ->where("categories.name", "=", $request->input("category"))
+          ->get();
+    } else {
+      $books = Book::all();
     }
-    if ($category != null) {
-      $category = urldecode($category);
-      $categoryId = Category::all("id")->where("name", $category);
-    }
-    // TODO create query according to variables and return as json
-    return response()->json(null);
+    return response()->json($books);
   }
 }
