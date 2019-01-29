@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
   $router->get('book',  ['uses' => 'BookController@show']);
-  $router->post('book',  ['uses' => 'CategoryController@store']);
+  $router->post('book',  ['uses' => 'BookController@store']);
 
   $router->get('category',  ['uses' => 'CategoryController@index']);
 });
